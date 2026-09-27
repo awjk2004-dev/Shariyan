@@ -1,0 +1,105 @@
+سأفحص مجلدات `__pycache__` الموجودة فعلياً وأشرح سبب تكرارها، ثم أشرح ملفات المشروع الأساسية حسب المجلد والامتداد. هذه المجلدات غالباً ملفات مؤقتة ينشئها Python تلقائياً وليست جزءاً من كود المشروع.
+
+Ran terminal command: Get-ChildItem -Recurse -Directory -Force -Filter __pycache__ | Where-Object {$_.FullName -notmatch '\\.venv\'} | Select-Object FullName; Write-Output '--- files ---'; Get-ChildItem -Recurse -File -Force -Filter *.pyc | Where-Object {$_.FullName -notmatch '\\.venv\'} | Select-Object FullName
+
+Ran terminal command: Get-ChildItem backend -Recurse -File | Where-Object {$_.Extension -in '.py','.html','.js','.css'} | Select-Object FullName; Get-ChildItem alembic -Recurse -File | Select-Object FullName; Get-ChildItem docs -File | Select-Object Name
+
+Read 
+
+نعم طبيعي وجود أكثر من مجلد `__pycache__`.
+
+## لماذا توجد في أكثر من مكان؟
+
+Python ينشئ مجلد `__pycache__` داخل كل مجلد يحتوي ملفات Python يتم تشغيلها أو استيرادها.
+
+الموجود حالياً:
+
+- `__pycache__`: ملفات مؤقتة لـ Alembic.
+- `__pycache__`: ملفات مؤقتة لملفات migrations.
+- `__pycache__`: ملفات مؤقتة لملفات النظام الأساسية.
+- `__pycache__`: ملفات مؤقتة لمسارات API.
+- `__pycache__`: ملفات مؤقتة للاختبارات.
+
+ملفات `.pyc` داخلها نسخ مترجمة من Python لتسريع التشغيل. لا تعدلها ولا تحتاجها في التسليم، ويمكن حذفها بأمان:
+
+```powershell
+Get-ChildItem -Recurse -Directory -Filter __pycache__ | Remove-Item -Recurse -Force
+```
+
+وهي مستبعدة من Git بسبب:
+
+```text
+__pycache__/
+*.py[cod]
+```
+
+## ملفات الجذر
+
+- `README.md`: شرح المشروع وأوامر التشغيل.
+- `requirements.txt`: مكتبات Python المطلوبة.
+- `.env`: إعدادات قاعدة البيانات والمفاتيح السرية.
+- `.env.example`: نموذج إعدادات بدون أسرار.
+- `alembic.ini`: إعدادات migrations.
+- `pytest.ini`: إعدادات الاختبارات.
+- `.gitignore`: الملفات التي لا يجب رفعها أو حفظها مثل `.env` و`__pycache__`.
+
+## ملفات Backend
+
+- `main.py`: تشغيل FastAPI وربط جميع المسارات.
+- `database.py`: الاتصال بقاعدة البيانات وإنشاء الجلسات.
+- `models.py`: جداول قاعدة البيانات والعلاقات.
+- `schemas.py`: التحقق من البيانات وشكل الطلبات والاستجابات.
+- `auth.py`: JWT وتشفير كلمات المرور والتحقق من الأدمن.
+- `seed_demo_data.py`: إضافة بيانات تجريبية.
+- `__init__.py`: تعريف مجلد backend كحزمة Python.
+
+## مجلد Routers
+
+- `auth.py`: التسجيل والدخول وترقية الأدمن.
+- `donors.py`: إضافة المتبرعين والبحث ولوحة المتصدرين.
+- `requests.py`: إنشاء وعرض طلبات الدم.
+- `messages.py`: الرسائل بين المستخدمين.
+- `notifications.py`: الإشعارات.
+- `admin.py`: إدارة المستخدمين والطلبات والولايات والتقارير.
+
+## الاختبارات
+
+- `conftest.py`: تجهيز قاعدة SQLite للاختبارات.
+- `test_api.py`: اختبار التسجيل والمتبرعين والطلبات.
+- `test_security_and_messaging.py`: اختبار الأدمن والأمان والرسائل.
+- `test_mysql_connection.py`: اختبار اتصال MySQL الحقيقي.
+
+## الواجهة الأمامية
+
+- `index.html`: الصفحة الرئيسية.
+- `about.html`: عن المنصة.
+- `login.html`: تسجيل الدخول.
+- `register.html`: إنشاء الحساب.
+- `donors.html`: البحث عن المتبرعين.
+- `requests.html`: عرض طلبات الدم.
+- `new-request.html`: إنشاء طلب دم.
+- `leaderboard.html`: المتصدرون.
+- `message.html`: المحادثات.
+- `notifications.html`: الإشعارات.
+- `dashboard.html`: لوحة تحكم الأدمن.
+- `admin.html`: إدارة المستخدمين والطلبات والولايات.
+- `app.js`: API والتنقل وتسجيل الخروج.
+- `style.css`: التنسيق العام.
+- `admin-dashboard.css`: تنسيق لوحة الأدمن.
+- `leaderboard.css`: تنسيق لوحة المتصدرين.
+
+## Alembic
+
+- `env.py`: ربط Alembic بقاعدة البيانات.
+- `script.py.mako`: قالب إنشاء migration.
+- `0001_initial.py`: إنشاء الجداول الأساسية.
+- `0002_notifications.py`: إضافة جدول الإشعارات.
+
+## التوثيق
+
+- `API.md`: توثيق مسارات API.
+- `chapter4_shريان.docx`: الفصل الرابع.
+- `create_chapter4_full.py`: إعادة إنشاء ملف Word.
+- ملفات `.png`: صور الشاشات المستخدمة في الفصل الرابع.
+
+الخلاصة: عدد الملفات ليس كبيراً فعلياً؛ أغلبها مقسّم حسب الوظيفة. أما مجلدات `__pycache__` فهي ملفات مؤقتة ويمكن حذفها بأمان، وستعود تلقائياً عند تشغيل Python.
