@@ -8,10 +8,10 @@ from slowapi.util import get_remote_address
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..auth import create_access_token, get_current_user, hash_password, verify_password
-from ..database import get_db
-from ..models import User
-from ..schemas import Token, UserCreate, UserOut
+from auth import create_access_token, get_current_user, hash_password, verify_password
+from database import get_db
+from models import User
+from schemas import Token, UserCreate, UserOut
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
