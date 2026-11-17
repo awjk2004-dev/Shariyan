@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from .models import BloodType, RequestStatus
+from  models import BloodType, RequestStatus
 
 
 class UserCreate(BaseModel):
