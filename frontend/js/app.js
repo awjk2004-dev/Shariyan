@@ -1,4 +1,8 @@
-const API = window.SHARIYAN_API_BASE_URL || (location.port === '5500' ? 'http://127.0.0.1:8000/api' : '/api');
+const API = window.SHARIYAN_API_BASE_URL || (
+  location.hostname === '127.0.0.1' || location.hostname === 'localhost'
+    ? 'http://127.0.0.1:8000/api'                  // التطوير المحلي
+    : 'https://shariyan-81fl.onrender.com/api'     // الإنتاج (Render)
+);
 const token = () => localStorage.getItem('shريان_token');
 function escapeHTML(value) { return String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character])); }
 function safeAppLink(value) { try { const url = new URL(String(value || ''), location.href); return ['http:', 'https:'].includes(url.protocol) && url.origin === location.origin ? `${url.pathname}${url.search}${url.hash}` : 'index.html'; } catch (_) { return 'index.html'; } }
