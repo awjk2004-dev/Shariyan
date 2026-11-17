@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
-from ..auth import get_current_user
-from ..database import get_db
-from ..models import BloodRequest, Message, Notification, User
-from ..schemas import MessageCreate, MessageOut
+from auth import get_current_user
+from database import get_db
+from models import BloodRequest, Message, Notification, User
+from schemas import MessageCreate, MessageOut
 
 router = APIRouter()
 
