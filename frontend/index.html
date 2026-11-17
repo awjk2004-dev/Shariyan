@@ -1,1 +1,118 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>شريان | كسلا</title><link rel="stylesheet" href="css/style.css"></head><body><div class="shell"><header class="topbar"><a class="brand" href="index.html">شريان<span>.</span></a><nav class="nav" data-nav><a href="donors.html">المتبرعون</a><a href="requests.html">طلبات الدم</a><a href="login.html">دخول</a></nav></header><main class="hero"><div><div class="eyebrow">ولاية كسلا • السودان</div><h1>كل قطرة في ولاية كسلا تقدر تنقذ حياة.</h1><p>منصة محلية مخصصة فقط لولاية كسلا، تربط المتبرعين بمرضى ومحتاجي الدم في أحياء الولاية بسرعة ووضوح.</p><div class="actions"><a class="button" href="register.html">إنشاء حساب</a><a class="button ghost" href="donors.html">البحث عن متبرع</a></div></div><div class="blood-mark">+</div></main><section class="section"><div class="section-heading"><h2>ابدأ من هنا</h2><span class="muted">كسلا، هدف واحد</span></div><div class="grid"><a class="card" href="donors.html"><div class="eyebrow">01</div><h3>أحتاج متبرعًا</h3><p class="muted">ابحث عن فصيلة الدم المناسبة في أحياء كسلا مثل المربعات الشعبي، المرغني، حي العرب، سكة حديد.</p></a><a class="card" href="register.html"><div class="eyebrow">02</div><h3>أريد التبرع</h3><p class="muted">سجّل فصيلتك وموقعك داخل كسلا لتصل لك طلبات من الأهالي القريبين.</p></a><a class="card" href="requests.html"><div class="eyebrow">03</div><h3>طلبات عاجلة</h3><p class="muted">تابع الطلبات المفتوحة في كسلا وشارك في إنقاذ حياة.</p></a></div></section><section class="section leaderboard-preview"><div class="section-heading"><div><div class="eyebrow">تكريم الجاهزية</div><h2>متصدرو العطاء</h2></div><a class="button ghost" href="leaderboard.html">عرض الكل</a></div><div class="grid" id="leaderboard-preview"><p class="muted">جاري تحميل المتصدرين...</p></div></section><footer class="footer">شريان • دعم الدم في كسلا.</footer></div><script src="js/app.js"></script><script>api('/donors/leaderboard').then(rows=>{const top=rows.slice(0,3);document.querySelector('#leaderboard-preview').innerHTML=top.length?top.map(r=>`<article class="card"><div class="eyebrow">#${r.rank} · ${r.score} نقطة</div><h3>${r.user.full_name}</h3><p class="muted">${r.user.city} · فصيلة ${r.blood_type}</p></article>`).join(''):'<p class="muted">لا توجد بيانات متاحة بعد.</p>'}).catch(()=>document.querySelector('#leaderboard-preview').innerHTML='<p class="muted">تظهر القائمة بعد تشغيل الخادم.</p>')</script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>شريان | كسلا</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+  </head>
+  <body class="home-page">
+    <header class="topbar shell">
+      <a class="brand" href="index.html">شريان<span>.</span></a>
+      <nav class="nav" data-nav>
+        <a href="donors.html">المتبرعون</a>
+        <a href="requests.html">طلبات الدم</a>
+        <a href="login.html">دخول</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero-band">
+        <div class="shell hero home-hero">
+          <div class="hero-copy">
+            <div class="eyebrow hero-location">
+              <span></span> ولاية كسلا، السودان
+            </div>
+            <h1>قطرة منك،<br /><em>حياة لغيرك.</em></h1>
+            <p>
+              شريان تقرّب المتبرعين من الناس المحتاجين للدم في كسلا. ابحث عن
+              متبرع أو سجّل استعدادك للتبرع.
+            </p>
+            <div class="actions">
+              <a class="button" href="donors.html"
+                >ابحث عن متبرع <span aria-hidden="true">←</span></a
+              >
+              <a class="button ghost" href="register.html">سجّل كمتبرع</a>
+            </div>
+            <div class="hero-note"><span>01</span> مبادرة محلية لأهل كسلا</div>
+          </div>
+          <div class="hero-visual" aria-label="قطرة دم ثلاثية الأبعاد">
+            <div class="scene-stage" data-blood-scene>
+              <canvas class="blood-canvas" aria-hidden="true"></canvas>
+              <div class="scene-fallback" aria-hidden="true"><span></span></div>
+              <div class="scene-caption">
+                <span>شريان</span><span>العطاء يبدأ بخطوة</span>
+              </div>
+            </div>
+            <div class="scene-index"><span>01</span><span>قطرة حياة</span></div>
+          </div>
+        </div>
+      </section>
+      <section class="section shell home-actions">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">كيف نقدر نساعدك؟</div>
+            <h2>خطوتك التالية</h2>
+          </div>
+          <span class="muted">اختر ما يناسبك</span>
+        </div>
+        <div class="grid">
+          <a class="card action-card" href="donors.html">
+            <div class="action-number">01</div>
+            <h3>أحتاج متبرعًا</h3>
+            <p class="muted">
+              ابحث عن فصيلة الدم المناسبة في أحياء كسلا مثل المربعات الشعبي،
+              المرغني، حي العرب، سكة حديد.
+            </p></a
+          ><a class="card action-card" href="register.html">
+            <div class="action-number">02</div>
+            <h3>أريد التبرع</h3>
+            <p class="muted">
+              سجّل فصيلتك وموقعك داخل كسلا لتصل لك طلبات من الأهالي القريبين.
+            </p></a
+          ><a class="card action-card" href="requests.html">
+            <div class="action-number">03</div>
+            <h3>طلبات عاجلة</h3>
+            <p class="muted">
+              تابع الطلبات المفتوحة في كسلا وشارك في إنقاذ حياة.
+            </p></a
+          >
+        </div>
+      </section>
+      <section class="section shell leaderboard-preview home-leaderboard">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">تكريم الجاهزية</div>
+            <h2>متصدرو العطاء</h2>
+          </div>
+          <a class="button ghost" href="leaderboard.html">عرض الكل</a>
+        </div>
+        <div class="grid" id="leaderboard-preview">
+          <p class="muted">جاري تحميل المتصدرين...</p>
+        </div>
+      </section>
+    </main>
+    <footer class="footer shell">شريان <span>•</span> دعم الدم في كسلا.</footer>
+    <script src="js/config.js?v=deployment-20261117"></script><script src="js/app.js?v=brand-20261117-v2"></script>
+    <script type="module" src="js/home-scene.js?v=brand-20261117-v4"></script>
+    <script>
+      api("/donors/leaderboard")
+        .then((rows) => {
+          const top = rows.slice(0, 3);
+          document.querySelector("#leaderboard-preview").innerHTML = top.length
+            ? top
+                .map(
+                  (r) =>
+                    `<article class="card"><div class="eyebrow">#${r.rank} · ${r.score} نقطة</div><h3>${escapeHTML(r.user.full_name)}</h3><p class="muted">${escapeHTML(r.user.city)} · فصيلة ${escapeHTML(r.blood_type)}</p></article>`,
+                )
+                .join("")
+            : '<p class="muted">لا توجد بيانات متاحة بعد.</p>';
+        })
+        .catch(
+          () =>
+            (document.querySelector("#leaderboard-preview").innerHTML =
+              '<p class="muted">تظهر القائمة بعد تشغيل الخادم.</p>'),
+        );
+    </script>
+  </body>
+</html>

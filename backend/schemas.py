@@ -86,6 +86,18 @@ class RequestOut(BaseModel):
     created_at: datetime
 
 
+class PublicRequestOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    blood_type: BloodType
+    city: str
+    hospital: str
+    units: int
+    urgent: bool
+    status: RequestStatus
+    created_at: datetime
+
+
 class MessageCreate(BaseModel):
     recipient_id: int
     request_id: int | None = None

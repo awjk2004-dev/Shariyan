@@ -10,7 +10,13 @@ from sqlalchemy.orm import Session
 from .database import get_db
 from .models import User
 
-SECRET_KEY = os.getenv("SECRET_KEY", "development-secret-change-me")
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+development_markers = ("change-this", "development-secret", "dev-", "replace-with", "example", "test-only")
+if len(SECRET_KEY) < 32 or (
+    os.getenv("APP_ENV", "development").strip().lower() == "production"
+    and any(marker in SECRET_KEY.lower() for marker in development_markers)
+):
+    raise RuntimeError("Set SECRET_KEY to a random value of at least 32 characters.")
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")

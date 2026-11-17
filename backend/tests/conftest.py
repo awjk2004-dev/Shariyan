@@ -1,6 +1,7 @@
 import os
 os.environ["DATABASE_URL"] = "sqlite:///./test_shريان.db"
 os.environ["ADMIN_BOOTSTRAP_TOKEN"] = "test-bootstrap-token"
+os.environ["SECRET_KEY"] = "test-only-secret-key-with-at-least-32-characters"
 
 import pytest
 from fastapi.testclient import TestClient

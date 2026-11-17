@@ -3,4 +3,10 @@ __pycache__/
 .pytest_cache/
 .venv/
 .env
+.env.*
+!.env.example
 *.db
+**/node_modules/
+*.pem
+*.key
+*.crt

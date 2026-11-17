@@ -1,0 +1,1 @@
+window.SHARIYAN_API_BASE_URL = "";

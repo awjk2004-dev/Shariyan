@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import Boolean, DateTime, Enum as SqlEnum, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Boolean, DateTime, Enum as SqlEnum, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -28,7 +28,7 @@ class User(Base):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     full_name: Mapped[str] = mapped_column(String(120))
-    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     phone: Mapped[str] = mapped_column(String(30))
     city: Mapped[str] = mapped_column(String(100), index=True)
@@ -42,6 +42,7 @@ class User(Base):
 
 class Donor(Base):
     __tablename__ = "donors"
+    __table_args__ = (Index("ix_donors_blood_type_available", "blood_type", "available"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True)
     blood_type: Mapped[BloodType] = mapped_column(SqlEnum(BloodType), index=True)
@@ -52,6 +53,7 @@ class Donor(Base):
 
 class BloodRequest(Base):
     __tablename__ = "blood_requests"
+    __table_args__ = (Index("ix_blood_requests_status_urgent_created", "status", "urgent", "created_at"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     requester_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     patient_name: Mapped[str] = mapped_column(String(120))
@@ -61,15 +63,19 @@ class BloodRequest(Base):
     units: Mapped[int] = mapped_column(Integer, default=1)
     urgent: Mapped[bool] = mapped_column(Boolean, default=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    status: Mapped[RequestStatus] = mapped_column(SqlEnum(RequestStatus), default=RequestStatus.OPEN, index=True)
+    status: Mapped[RequestStatus] = mapped_column(SqlEnum(RequestStatus), default=RequestStatus.OPEN)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
 class Message(Base):
     __tablename__ = "messages"
+    __table_args__ = (
+        Index("ix_messages_sender_recipient_created", "sender_id", "recipient_id", "created_at"),
+        Index("ix_messages_recipient_sender_created", "recipient_id", "sender_id", "created_at"),
+    )
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    sender_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    recipient_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    sender_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    recipient_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     request_id: Mapped[int | None] = mapped_column(ForeignKey("blood_requests.id", ondelete="SET NULL"), nullable=True, index=True)
     content: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
@@ -78,8 +84,9 @@ class Message(Base):
 
 class Notification(Base):
     __tablename__ = "notifications"
+    __table_args__ = (Index("ix_notifications_user_created", "user_id", "created_at"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     title: Mapped[str] = mapped_column(String(160))
     body: Mapped[str] = mapped_column(String(500))
     link: Mapped[str | None] = mapped_column(String(255), nullable=True)

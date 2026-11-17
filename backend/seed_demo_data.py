@@ -1,9 +1,14 @@
+import os
+
 from backend.auth import hash_password
 from backend.database import SessionLocal
 from backend.models import BloodRequest, BloodType, Donor, RequestStatus, User
 
 
 def create_demo_data():
+    if os.getenv("APP_ENV", "development").strip().lower() == "production":
+        raise RuntimeError("Demo data seeding is disabled in production.")
+
     db = SessionLocal()
 
     demo_users = [

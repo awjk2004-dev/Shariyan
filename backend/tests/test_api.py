@@ -29,6 +29,11 @@ def test_registration_donor_and_blood_request(client):
     assert request.status_code == 201
     assert request.json()["status"] == "open"
 
+    public_request = client.get("/api/requests")
+    assert public_request.status_code == 200
+    assert "patient_name" not in public_request.json()[0]
+    assert "notes" not in public_request.json()[0]
+
 
 def test_donor_search_by_type_and_city(client):
     headers = register_and_login(client)

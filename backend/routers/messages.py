@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
 from ..auth import get_current_user
@@ -33,7 +33,12 @@ def send_message(payload: MessageCreate, db: Session = Depends(get_db), user: Us
 def conversation(user_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     if not db.get(User, user_id) or user_id == user.id:
         raise HTTPException(status_code=404, detail="Conversation not found")
-    query = select(Message).where(or_(Message.sender_id == user.id, Message.recipient_id == user.id), or_(Message.sender_id == user_id, Message.recipient_id == user_id)).order_by(Message.created_at.asc())
+    query = select(Message).where(
+        or_(
+            and_(Message.sender_id == user.id, Message.recipient_id == user_id),
+            and_(Message.sender_id == user_id, Message.recipient_id == user.id),
+        )
+    ).order_by(Message.created_at.asc())
     messages = list(db.scalars(query))
     for message in messages:
         if message.recipient_id == user.id and message.read_at is None:

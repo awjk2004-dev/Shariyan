@@ -1,6 +1,6 @@
-# Shريان
+# Shariyan
 
-Shريان is a digital blood donation platform that connects blood donors with people who need blood in Kassala, Sudan. The system provides donor search, blood requests, notifications, messaging, reports, and an administrator dashboard.
+Shariyan is a digital blood donation platform that connects blood donors with people who need blood in Kassala, Sudan. The system provides donor search, blood requests, notifications, messaging, reports, and an administrator dashboard.
 
 ## Main Technologies
 
@@ -25,7 +25,7 @@ Install the following before running the project:
 Open PowerShell in the project root:
 
 ```powershell
-cd "C:\Users\AHMED\OneDrive\Desktop\شريان"
+cd "C:\Users\AHMED\OneDrive\Desktop\Shariyan"
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -48,8 +48,8 @@ Copy-Item .env.example .env
 Update `.env` with your local database settings. Example:
 
 ```text
-DATABASE_URL=mysql+pymysql://root:@127.0.0.1:3306/shريان
-SECRET_KEY=change-this-before-production
+DATABASE_URL=mysql+pymysql://root:@127.0.0.1:3306/shariyan
+SECRET_KEY=development-only-example-key-do-not-deploy-0123456789
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 CORS_ORIGINS=http://localhost:5500,http://127.0.0.1:5500
 ADMIN_BOOTSTRAP_TOKEN=use-a-long-random-token
@@ -63,7 +63,7 @@ Do not publish `.env` or share its secret values. The `.env.example` file is onl
 1. Open the XAMPP Control Panel.
 2. Start MySQL.
 3. Open phpMyAdmin at `http://127.0.0.1/phpmyadmin`.
-4. Create a database named `shريان` if it does not already exist.
+4. Create a database named `shariyan` if it does not already exist.
 5. Make sure the database name and credentials match `DATABASE_URL` in `.env`.
 
 ## Apply Database Migrations
@@ -188,6 +188,23 @@ To test the real MySQL connection:
 $env:MYSQL_TEST_DATABASE_URL = "mysql+pymysql://root:@127.0.0.1:3306/shريان"
 .\.venv\Scripts\python.exe -m pytest backend/tests/test_mysql_connection.py -q
 ```
+
+## Production Deployment Preparation
+
+Generate separate random values for `SECRET_KEY` and `ADMIN_BOOTSTRAP_TOKEN` (at least 32 characters each), then set these variables in the hosting provider's secret/environment settings. For example, PowerShell can generate a random value with `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(48))`. Do not reuse the example value, commit production values, or upload `.env`:
+
+```text
+APP_ENV=production
+DATABASE_URL=mysql+pymysql://USER:PASSWORD@HOST:PORT/DATABASE
+DB_SSL_CA=/path/to/provider-ca.pem
+SECRET_KEY=<random value with at least 32 characters>
+ADMIN_BOOTSTRAP_TOKEN=<random value with at least 32 characters>
+CORS_ORIGINS=https://your-frontend-domain.example
+```
+
+For Aiven, download its CA certificate and set `DB_SSL_CA` to the certificate path. Production startup rejects SQLite, missing CA verification, weak secrets, and non-HTTPS/local CORS origins. Interactive API documentation is disabled in production. Run migrations with `python -m alembic upgrade head` before starting the API, and do not run the demo-data seeder in production. Remove `ADMIN_BOOTSTRAP_TOKEN` from the hosting settings after creating the first administrator.
+
+The frontend's Three.js and Cairo font files are stored under `frontend/vendor/` and `frontend/assets/`; static hosting does not need to publish `node_modules/`. When the hosting URLs are chosen, set the public backend API base URL (including `/api`) in `frontend/js/config.js`. This URL is public configuration, never a secret.
 
 ## Useful API Endpoints
 
