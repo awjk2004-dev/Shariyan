@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from ..auth import require_admin
-from ..database import get_db
-from ..models import BloodRequest, Donor, RequestStatus, User
-from ..schemas import RequestOut, UserCityUpdate, UserOut
+from auth import require_admin
+from database import get_db
+from models import BloodRequest, Donor, RequestStatus, User
+from schemas import RequestOut, UserCityUpdate, UserOut
 
 router = APIRouter()
 
