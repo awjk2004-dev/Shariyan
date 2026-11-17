@@ -4,7 +4,7 @@ from enum import Enum
 from sqlalchemy import Boolean, DateTime, Enum as SqlEnum, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .database import Base
+from  database import Base
 
 
 class BloodType(str, Enum):
