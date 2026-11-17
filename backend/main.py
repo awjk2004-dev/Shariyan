@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from .database import Base, engine
-from .routers import admin, auth, donors, messages, notifications, requests
+from  database import Base, engine
+from  routers import admin, auth, donors, messages, notifications, requests
 
 app_env = os.getenv("APP_ENV", "development").strip().lower()
 production = app_env == "production"
@@ -32,7 +32,7 @@ if production and (
     raise RuntimeError("Set ADMIN_BOOTSTRAP_TOKEN to a random value of at least 32 characters.")
 
 app = FastAPI(
-    title="Shريان API",
+    title="Shariyan API",
     version="1.1.0",
     description="API لمنصة التبرع بالدم والطلبات والإشعارات والإدارة.",
     docs_url=None if production else "/docs",
