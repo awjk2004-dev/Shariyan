@@ -23,16 +23,19 @@ def test_registration_donor_and_blood_request(client):
         "blood_type": "O+",
         "city": "Riyadh",
         "hospital": "Central Hospital",
+        "contact_phone": "0501234567",
         "units": 2,
         "urgent": True,
     })
     assert request.status_code == 201
     assert request.json()["status"] == "open"
+    assert request.json()["contact_phone"] == "0501234567"
 
     public_request = client.get("/api/requests")
     assert public_request.status_code == 200
     assert "patient_name" not in public_request.json()[0]
     assert "notes" not in public_request.json()[0]
+    assert public_request.json()[0]["contact_phone"] == "0501234567"
 
 
 def test_registration_with_blood_type_creates_donor_profile(client):
@@ -54,6 +57,9 @@ def test_registration_with_blood_type_creates_donor_profile(client):
     profile = client.get("/api/donors/me", headers=headers)
     assert profile.status_code == 200
     assert profile.json()["blood_type"] == "AB+"
+    leaderboard = client.get("/api/donors/leaderboard")
+    assert leaderboard.status_code == 200
+    assert leaderboard.json()[0]["score"] == 70
 
 
 def test_donor_profile_is_null_for_registered_user_without_blood_type(client):

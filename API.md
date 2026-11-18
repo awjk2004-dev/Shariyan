@@ -28,7 +28,7 @@ Authorization: Bearer <access_token>
 | POST | `/api/donors/me` | JWT | إنشاء أو تحديث ملف المتبرع |
 | GET | `/api/donors/me` | JWT | عرض ملف المتبرع الحالي أو `null` إذا لم يكن مسجلًا |
 | GET | `/api/donors?blood_type=O%2B&city=كسلا` | عامة | البحث عن المتبرعين |
-| POST | `/api/requests` | JWT | إنشاء طلب دم |
+| POST | `/api/requests` | JWT | إنشاء طلب دم مع رقم تواصل اختياري يظهر للمتبرعين |
 | GET | `/api/requests` | عامة | عرض الطلبات المفتوحة |
 | PATCH | `/api/requests/{id}/cancel` | JWT | إلغاء طلب المستخدم |
 
@@ -66,6 +66,7 @@ Authorization: Bearer <access_token>
   "blood_type": "O+",
   "city": "Riyadh",
   "hospital": "Central Hospital",
+  "contact_phone": "0501234567",
   "units": 2,
   "urgent": true,
   "notes": "يرجى الحضور خلال ساعتين"

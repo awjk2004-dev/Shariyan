@@ -61,6 +61,7 @@ class BloodRequest(Base):
     blood_type: Mapped[BloodType] = mapped_column(SqlEnum(BloodType), index=True)
     city: Mapped[str] = mapped_column(String(100), index=True)
     hospital: Mapped[str] = mapped_column(String(180))
+    contact_phone: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     units: Mapped[int] = mapped_column(Integer, default=1)
     urgent: Mapped[bool] = mapped_column(Boolean, default=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)                    # ← تعديل

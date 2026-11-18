@@ -68,6 +68,7 @@ class RequestCreate(BaseModel):
     blood_type: BloodType
     city: str = Field(min_length=2, max_length=100)
     hospital: str = Field(min_length=2, max_length=180)
+    contact_phone: str | None = Field(default=None, min_length=7, max_length=30)
     units: int = Field(default=1, ge=1, le=20)
     urgent: bool = True
     notes: str | None = Field(default=None, max_length=1000)
@@ -80,6 +81,7 @@ class RequestOut(BaseModel):
     blood_type: BloodType
     city: str
     hospital: str
+    contact_phone: str | None
     units: int
     urgent: bool
     notes: str | None
@@ -93,6 +95,7 @@ class PublicRequestOut(BaseModel):
     blood_type: BloodType
     city: str
     hospital: str
+    contact_phone: str | None
     units: int
     urgent: bool
     status: RequestStatus
