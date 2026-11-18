@@ -10,6 +10,7 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=8, max_length=128)
     phone: str = Field(min_length=7, max_length=30)
     city: str = Field(min_length=2, max_length=100)
+    blood_type: BloodType | None = None
 
 
 class UserOut(BaseModel):

@@ -16,7 +16,7 @@ Authorization: Bearer <access_token>
 
 | الطريقة | المسار | الحماية | الوصف |
 |---|---|---|---|
-| POST | `/api/auth/register` | عامة | إنشاء حساب |
+| POST | `/api/auth/register` | عامة | إنشاء حساب؛ يمكن إرسال `blood_type` لإنشاء ملف متبرع تلقائيًا |
 | POST | `/api/auth/login` | عامة | تسجيل الدخول بصيغة form: `username`, `password` |
 | GET | `/api/auth/me` | JWT | بيانات المستخدم الحالي |
 | POST | `/api/auth/bootstrap-admin` | header سري | ترقية أول مستخدم إلى مشرف |
@@ -26,6 +26,7 @@ Authorization: Bearer <access_token>
 | الطريقة | المسار | الحماية | الوصف |
 |---|---|---|---|
 | POST | `/api/donors/me` | JWT | إنشاء أو تحديث ملف المتبرع |
+| GET | `/api/donors/me` | JWT | عرض ملف المتبرع الحالي أو `null` إذا لم يكن مسجلًا |
 | GET | `/api/donors?blood_type=O%2B&city=كسلا` | عامة | البحث عن المتبرعين |
 | POST | `/api/requests` | JWT | إنشاء طلب دم |
 | GET | `/api/requests` | عامة | عرض الطلبات المفتوحة |

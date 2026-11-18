@@ -32,7 +32,7 @@
               <a class="button" href="donors.html"
                 >ابحث عن متبرع <span aria-hidden="true">←</span></a
               >
-              <a class="button ghost" href="register.html">سجّل كمتبرع</a>
+              <a class="button ghost" href="register.html" data-donor-cta="hero">سجّل كمتبرع</a>
             </div>
             <div class="hero-note"><span>01</span> مبادرة محلية لأهل كسلا</div>
           </div>
@@ -64,9 +64,9 @@
               ابحث عن فصيلة الدم المناسبة في أحياء كسلا مثل المربعات الشعبي،
               المرغني، حي العرب، سكة حديد.
             </p></a
-          ><a class="card action-card" href="register.html">
+          ><a class="card action-card" href="register.html" data-donor-cta="card">
             <div class="action-number">02</div>
-            <h3>أريد التبرع</h3>
+            <h3 data-donor-heading>أريد التبرع</h3>
             <p class="muted">
               سجّل فصيلتك وموقعك داخل كسلا لتصل لك طلبات من الأهالي القريبين.
             </p></a
@@ -96,6 +96,18 @@
     <script src="js/config.js?v=deployment-20261117"></script><script src="js/app.js?v=brand-20261117-v2"></script>
     <script type="module" src="js/home-scene.js?v=brand-20261117-v4"></script>
     <script>
+      if (token()) {
+        api("/donors/me")
+          .then((donor) => {
+            if (!donor) return;
+            document.querySelector('[data-donor-cta="hero"]').textContent =
+              "حدّث بيانات التبرع";
+            document.querySelector('[data-donor-cta="card"]').querySelector("h3").textContent =
+              "تحديث بيانات التبرع";
+          })
+          .catch((error) => console.error("تعذر تحميل ملف المتبرع.", error));
+      }
+
       api("/donors/leaderboard")
         .then((rows) => {
           const top = rows.slice(0, 3);

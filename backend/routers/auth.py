@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from auth import create_access_token, get_current_user, hash_password, verify_password
 from database import get_db
-from models import User
+from models import Donor, User
 from schemas import Token, UserCreate, UserOut
 
 router = APIRouter()
@@ -22,7 +22,13 @@ limiter = Limiter(key_func=get_remote_address)
 def register(request: Request, payload: UserCreate, db: Session = Depends(get_db)):
     if db.scalar(select(User).where(User.email == payload.email)):
         raise HTTPException(status_code=409, detail="Email already registered")
-    user = User(**payload.model_dump(exclude={"password"}), password_hash=hash_password(payload.password), email_verified=True)
+    user = User(
+        **payload.model_dump(exclude={"password", "blood_type"}),
+        password_hash=hash_password(payload.password),
+        email_verified=True,
+    )
+    if payload.blood_type:
+        user.donor_profile = Donor(blood_type=payload.blood_type)
     db.add(user)
     db.commit()
     db.refresh(user)

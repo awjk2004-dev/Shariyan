@@ -25,6 +25,13 @@ def register_donor(payload: DonorCreate, db: Session = Depends(get_db), user: Us
     return donor
 
 
+@router.get("/me", response_model=DonorOut | None)
+def get_my_donor_profile(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    return db.scalar(
+        select(Donor).where(Donor.user_id == user.id).options(joinedload(Donor.user))
+    )
+
+
 @router.get("", response_model=list[DonorOut])
 def list_donors(blood_type: BloodType | None = None, city: str | None = None, db: Session = Depends(get_db)):
     query = select(Donor).join(Donor.user).options(joinedload(Donor.user)).where(Donor.available.is_(True))

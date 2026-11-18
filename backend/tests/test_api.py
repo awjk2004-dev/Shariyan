@@ -35,6 +35,35 @@ def test_registration_donor_and_blood_request(client):
     assert "notes" not in public_request.json()[0]
 
 
+def test_registration_with_blood_type_creates_donor_profile(client):
+    registered = client.post("/api/auth/register", json={
+        "full_name": "Amina Donor",
+        "email": "amina@example.com",
+        "password": "StrongPass123",
+        "phone": "0500000001",
+        "city": "Riyadh",
+        "blood_type": "AB+",
+    })
+    assert registered.status_code == 201
+    login = client.post("/api/auth/login", data={
+        "username": "amina@example.com",
+        "password": "StrongPass123",
+    })
+    headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+
+    profile = client.get("/api/donors/me", headers=headers)
+    assert profile.status_code == 200
+    assert profile.json()["blood_type"] == "AB+"
+
+
+def test_donor_profile_is_null_for_registered_user_without_blood_type(client):
+    headers = register_and_login(client)
+
+    profile = client.get("/api/donors/me", headers=headers)
+    assert profile.status_code == 200
+    assert profile.json() is None
+
+
 def test_donor_search_by_type_and_city(client):
     headers = register_and_login(client)
     client.post("/api/donors/me", headers=headers, json={"blood_type": "A-"})
